@@ -22,10 +22,10 @@ public class GramaticaParser extends Parser {
 		T__0=1, T__1=2, T__2=3, T__3=4, T__4=5, TIPO=6, ID=7, INT=8, FLOAT=9, 
 		LETRA=10, NUM=11, WS=12;
 	public static final int
-		RULE_prog = 0, RULE_attr = 1, RULE_expr = 2;
+		RULE_prog = 0, RULE_attr = 1, RULE_opArit = 2;
 	private static String[] makeRuleNames() {
 		return new String[] {
-			"prog", "attr", "expr"
+			"prog", "attr", "opArit"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
@@ -112,11 +112,11 @@ public class GramaticaParser extends Parser {
 		public AttrContext attr(int i) {
 			return getRuleContext(AttrContext.class,i);
 		}
-		public List<ExprContext> expr() {
-			return getRuleContexts(ExprContext.class);
+		public List<OpAritContext> opArit() {
+			return getRuleContexts(OpAritContext.class);
 		}
-		public ExprContext expr(int i) {
-			return getRuleContext(ExprContext.class,i);
+		public OpAritContext opArit(int i) {
+			return getRuleContext(OpAritContext.class,i);
 		}
 		public ProgramaContext(ProgContext ctx) { copyFrom(ctx); }
 		@Override
@@ -160,7 +160,7 @@ public class GramaticaParser extends Parser {
 				case 2:
 					{
 					setState(7);
-					expr(0);
+					opArit(0);
 					}
 					break;
 				}
@@ -258,25 +258,25 @@ public class GramaticaParser extends Parser {
 		return _localctx;
 	}
 
-	public static class ExprContext extends ParserRuleContext {
-		public ExprContext(ParserRuleContext parent, int invokingState) {
+	public static class OpAritContext extends ParserRuleContext {
+		public OpAritContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_expr; }
+		@Override public int getRuleIndex() { return RULE_opArit; }
 	 
-		public ExprContext() { }
-		public void copyFrom(ExprContext ctx) {
+		public OpAritContext() { }
+		public void copyFrom(OpAritContext ctx) {
 			super.copyFrom(ctx);
 		}
 	}
-	public static class MultiplicacaoContext extends ExprContext {
-		public List<ExprContext> expr() {
-			return getRuleContexts(ExprContext.class);
+	public static class MultiplicacaoContext extends OpAritContext {
+		public List<OpAritContext> opArit() {
+			return getRuleContexts(OpAritContext.class);
 		}
-		public ExprContext expr(int i) {
-			return getRuleContext(ExprContext.class,i);
+		public OpAritContext opArit(int i) {
+			return getRuleContext(OpAritContext.class,i);
 		}
-		public MultiplicacaoContext(ExprContext ctx) { copyFrom(ctx); }
+		public MultiplicacaoContext(OpAritContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof GramaticaListener ) ((GramaticaListener)listener).enterMultiplicacao(this);
@@ -291,9 +291,9 @@ public class GramaticaParser extends Parser {
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class VariavelContext extends ExprContext {
+	public static class VariavelContext extends OpAritContext {
 		public TerminalNode ID() { return getToken(GramaticaParser.ID, 0); }
-		public VariavelContext(ExprContext ctx) { copyFrom(ctx); }
+		public VariavelContext(OpAritContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof GramaticaListener ) ((GramaticaListener)listener).enterVariavel(this);
@@ -308,14 +308,14 @@ public class GramaticaParser extends Parser {
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class SomaContext extends ExprContext {
-		public List<ExprContext> expr() {
-			return getRuleContexts(ExprContext.class);
+	public static class SomaContext extends OpAritContext {
+		public List<OpAritContext> opArit() {
+			return getRuleContexts(OpAritContext.class);
 		}
-		public ExprContext expr(int i) {
-			return getRuleContext(ExprContext.class,i);
+		public OpAritContext opArit(int i) {
+			return getRuleContext(OpAritContext.class,i);
 		}
-		public SomaContext(ExprContext ctx) { copyFrom(ctx); }
+		public SomaContext(OpAritContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof GramaticaListener ) ((GramaticaListener)listener).enterSoma(this);
@@ -330,9 +330,9 @@ public class GramaticaParser extends Parser {
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class RealContext extends ExprContext {
+	public static class RealContext extends OpAritContext {
 		public TerminalNode FLOAT() { return getToken(GramaticaParser.FLOAT, 0); }
-		public RealContext(ExprContext ctx) { copyFrom(ctx); }
+		public RealContext(OpAritContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof GramaticaListener ) ((GramaticaListener)listener).enterReal(this);
@@ -347,9 +347,9 @@ public class GramaticaParser extends Parser {
 			else return visitor.visitChildren(this);
 		}
 	}
-	public static class InteiroContext extends ExprContext {
+	public static class InteiroContext extends OpAritContext {
 		public TerminalNode INT() { return getToken(GramaticaParser.INT, 0); }
-		public InteiroContext(ExprContext ctx) { copyFrom(ctx); }
+		public InteiroContext(OpAritContext ctx) { copyFrom(ctx); }
 		@Override
 		public void enterRule(ParseTreeListener listener) {
 			if ( listener instanceof GramaticaListener ) ((GramaticaListener)listener).enterInteiro(this);
@@ -365,17 +365,17 @@ public class GramaticaParser extends Parser {
 		}
 	}
 
-	public final ExprContext expr() throws RecognitionException {
-		return expr(0);
+	public final OpAritContext opArit() throws RecognitionException {
+		return opArit(0);
 	}
 
-	private ExprContext expr(int _p) throws RecognitionException {
+	private OpAritContext opArit(int _p) throws RecognitionException {
 		ParserRuleContext _parentctx = _ctx;
 		int _parentState = getState();
-		ExprContext _localctx = new ExprContext(_ctx, _parentState);
-		ExprContext _prevctx = _localctx;
+		OpAritContext _localctx = new OpAritContext(_ctx, _parentState);
+		OpAritContext _prevctx = _localctx;
 		int _startState = 4;
-		enterRecursionRule(_localctx, 4, RULE_expr, _p);
+		enterRecursionRule(_localctx, 4, RULE_opArit, _p);
 		try {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
@@ -428,26 +428,26 @@ public class GramaticaParser extends Parser {
 					switch ( getInterpreter().adaptivePredict(_input,3,_ctx) ) {
 					case 1:
 						{
-						_localctx = new MultiplicacaoContext(new ExprContext(_parentctx, _parentState));
-						pushNewRecursionContext(_localctx, _startState, RULE_expr);
+						_localctx = new MultiplicacaoContext(new OpAritContext(_parentctx, _parentState));
+						pushNewRecursionContext(_localctx, _startState, RULE_opArit);
 						setState(31);
 						if (!(precpred(_ctx, 5))) throw new FailedPredicateException(this, "precpred(_ctx, 5)");
 						setState(32);
 						match(T__3);
 						setState(33);
-						expr(6);
+						opArit(6);
 						}
 						break;
 					case 2:
 						{
-						_localctx = new SomaContext(new ExprContext(_parentctx, _parentState));
-						pushNewRecursionContext(_localctx, _startState, RULE_expr);
+						_localctx = new SomaContext(new OpAritContext(_parentctx, _parentState));
+						pushNewRecursionContext(_localctx, _startState, RULE_opArit);
 						setState(34);
 						if (!(precpred(_ctx, 4))) throw new FailedPredicateException(this, "precpred(_ctx, 4)");
 						setState(35);
 						match(T__4);
 						setState(36);
-						expr(5);
+						opArit(5);
 						}
 						break;
 					}
@@ -473,11 +473,11 @@ public class GramaticaParser extends Parser {
 	public boolean sempred(RuleContext _localctx, int ruleIndex, int predIndex) {
 		switch (ruleIndex) {
 		case 2:
-			return expr_sempred((ExprContext)_localctx, predIndex);
+			return opArit_sempred((OpAritContext)_localctx, predIndex);
 		}
 		return true;
 	}
-	private boolean expr_sempred(ExprContext _localctx, int predIndex) {
+	private boolean opArit_sempred(OpAritContext _localctx, int predIndex) {
 		switch (predIndex) {
 		case 0:
 			return precpred(_ctx, 5);

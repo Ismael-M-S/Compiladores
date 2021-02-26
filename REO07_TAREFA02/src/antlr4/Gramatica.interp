@@ -31,7 +31,7 @@ WS
 rule names:
 prog
 attr
-expr
+opArit
 
 
 atn:

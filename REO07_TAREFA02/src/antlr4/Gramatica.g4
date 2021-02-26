@@ -4,14 +4,14 @@ grammar Gramatica;
     package antlr4;
 }
 
-prog: ((attr | expr) ';')* EOF          #Programa
+prog: ((attr | opArit) ';')* EOF          #Programa
     ;
 
 attr: ID ':' TIPO '=' (INT | FLOAT)     #Atribuicao
     ;
 
-expr: expr '*' expr       #Multiplicacao
-    | expr '+' expr       #Soma
+opArit: opArit '*' opArit       #Multiplicacao
+    | opArit '+' opArit       #Soma
     | INT                 #Inteiro
     | FLOAT               #Real
     | ID                  #Variavel
