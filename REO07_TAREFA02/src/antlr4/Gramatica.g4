@@ -4,21 +4,23 @@ grammar Gramatica;
     package antlr4;
 }
 
-prog: ((attr | opArit) ';')* EOF          #Programa
+prog: ((attr | opArit) ';')* EOF    #Programa
     ;
 
-attr: ID ':' TIPO '=' (INT | FLOAT)     #Atribuicao
+attr: ID ':' TIPO '=' VALOR         #Atribuicao
     ;
 
-opArit: opArit '*' opArit       #Multiplicacao
-    | opArit '+' opArit       #Soma
-    | INT                 #Inteiro
-    | FLOAT               #Real
-    | ID                  #Variavel
+opArit: opArit '*' opArit           #Multiplicacao
+    | opArit '+' opArit             #Soma
+    | INT                           #Inteiro
+    | FLOAT                         #Real
+    | ID                            #Variavel
     ;
 
-TIPO: ('INT' | 'FLOAT');
 ID: (LETRA | '_')(LETRA | NUM)*;
+TIPO: ('INT' | 'FLOAT');
+VALOR: (INT | FLOAT);
+
 INT: NUM+;
 FLOAT: NUM+'.'NUM+;
 

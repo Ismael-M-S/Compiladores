@@ -1,17 +1,17 @@
 package expr;
 
-public class Tipo {
+public class Tipo extends Expression {
     private String tipo;
 
     public Tipo(String tipo) {
         this.tipo = tipo;
     }
 
-    public String getTipo() {
-        if (!(tipo.equals("INT") || tipo.equals("FLOAT"))) {
-            return String.format("Este tipo nao existe: %s", tipo);
-        }
+    public boolean isValid() {
+        return !(tipo.equals("INT") || tipo.equals("FLOAT"));
+    }
 
+    public String getTipo() {
         return tipo;
     }
 

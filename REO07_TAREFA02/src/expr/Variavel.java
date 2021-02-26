@@ -1,14 +1,18 @@
 package expr;
 
 public class Variavel extends Expression {
-    String name;
+    String nome;
 
-    public Variavel(String name) {
-        this.name=name;
+    public Variavel(String nome) {
+        this.nome = nome;
+    }
+
+    public boolean isValid() {
+        return nome.matches("([a-zA-Z] | '_')([a-zA-Z] | [0-9])*");
     }
 
     @Override
     public String toString() {
-        return name;
+        return nome;
     }
 }

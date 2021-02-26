@@ -1,19 +1,25 @@
 package expr;
 
-public class Atribuicao extends Expression{
-    String id;
+public class Atribuicao extends Expression {
+    Variavel id;
     Tipo tipo;
-    int valor;
+    Valor valor;
 
-    public Atribuicao(String id, String tipo, int valor) {
-        this.id = id;
+    public Atribuicao(String id, String tipo, String valor) {
+        this.id = new Variavel(id);
         this.tipo = new Tipo(tipo);
-        this.valor = valor;
+
+        if (valor.matches("[-+]?[0-9]*\\.[0-9]+")) {
+            this.valor = new ValorReal(Float.parseFloat(valor));
+        } else if (valor.matches("[-+]?[0-9]+")) {
+            this.valor = new ValorInteiro(Integer.parseInt(valor));
+        } else {
+            this.valor = new ValorInvalido(valor);
+        }
     }
 
     @Override
     public String toString() {
-        String.format("%d:%s=%");
-        return id+" = "+Integer.toString(valor);
+        return String.format("%s:%s=%s", id, tipo, valor);
     }
 }
