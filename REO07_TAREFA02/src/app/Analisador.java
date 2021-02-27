@@ -48,13 +48,15 @@ public class Analisador {
         System.out.println("***Visitando AST");
         Programa prog = progVisitor.visit(ast);
 
-        if (progVisitor.semanticError.isEmpty()) {
+        if (progVisitor.semanticErrors.isEmpty()) {
             System.out.println("Resultado da Análise: OK");
         } else {
-            System.out.println("Resultado da Análise: " + progVisitor.semanticError.size() + "erros encontrados");
-            for (String err : progVisitor.semanticError) {
+            System.out.println("Resultado da Análise: " + progVisitor.semanticErrors.size() + " erro(s) encontrado(s)");
+            for (String err : progVisitor.semanticErrors) {
                 System.out.println(err);
             }
         }
+
+        progVisitor.symbleTable.print();
     }
 }

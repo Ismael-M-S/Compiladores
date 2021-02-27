@@ -5,17 +5,17 @@ import java.util.Map;
 
 public class SymbleTable {
 
-    public Map<String, Integer> symbleTable;
+    public Map<String, Valor> symbleTable;
 
     public SymbleTable() {
         this.symbleTable = new HashMap<>();
     }
 
-    public void add(String id, int value) {
+    public void add(String id, Valor value) {
         symbleTable.put(id, value);
     }
 
-    public int valueof(String id) {
+    public Valor valueof(String id) {
         return symbleTable.get(id);
     }
 

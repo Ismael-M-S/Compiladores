@@ -7,18 +7,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AntlrToProgram extends GramaticaBaseVisitor<Programa> {
-    public List<String> semanticError;
+    public List<String> semanticErrors;
+    public SymbleTable symbleTable;
 
     @Override
     public Programa visitPrograma(GramaticaParser.ProgramaContext ctx) {
+
         Programa prog = new Programa();
 
-        semanticError= new ArrayList<>();
+        semanticErrors = new ArrayList<>();
 
-        AntlrToExpression exprVisitor = new AntlrToExpression(semanticError);
+        symbleTable = new SymbleTable();
 
-        for(int i=0; i<ctx.getChildCount()-1;i++){
-            prog.addExpression(exprVisitor.visit(ctx.getChild(i)));
+        AntlrToExpression exprVisitor = new AntlrToExpression(semanticErrors, symbleTable);
+
+        for (int i =0;i<ctx.getChildCount();i++){
+            if (i!=ctx.getChildCount()-1){
+                prog.addExpression(exprVisitor.visit(ctx.getChild(i)));
+            }
         }
 
         return prog;

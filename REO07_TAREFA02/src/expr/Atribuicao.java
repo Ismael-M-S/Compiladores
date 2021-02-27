@@ -11,16 +11,18 @@ public class Atribuicao extends Expression {
 
         if (valor.matches("[-+]?[0-9]*\\.[0-9]+")) {
             this.valor = new ValorReal(Float.parseFloat(valor));
+            this.id.setType("INT");
         } else if (valor.matches("[-+]?[0-9]+")) {
             this.valor = new ValorInteiro(Integer.parseInt(valor));
+            this.id.setType("FLOAT");
         } else {
             this.valor = new ValorInvalido(valor);
+            this.id.setType("INVALIDO");
         }
     }
 
-    @Override
-    public String toString() {
-        return String.format("%s:%s=%s", id, tipo, valor);
+    public boolean isValid() {
+        return (getTipoVerdadeiro().equals(tipo.getTipo()));
     }
 
     public String getTipoVerdadeiro() {
@@ -33,5 +35,10 @@ public class Atribuicao extends Expression {
         else {
             return "INVALIDO";
         }
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s:%s=%s", id, tipo, valor);
     }
 }

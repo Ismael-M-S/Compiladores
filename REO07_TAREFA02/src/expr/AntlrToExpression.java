@@ -6,10 +6,8 @@ import org.antlr.v4.runtime.Token;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class AntlrToExpression extends GramaticaBaseVisitor<Expression> {
-
     private List<String> declaredVariables;
 
     /*
@@ -21,72 +19,148 @@ public class AntlrToExpression extends GramaticaBaseVisitor<Expression> {
      * */
     private List<String> semanticErrors;
 
-    public AntlrToExpression(List<String> semanticErrors) {
+    private SymbleTable symbleTable;
+
+    public AntlrToExpression(List<String> semanticErrors, SymbleTable symbleTable) {
         declaredVariables = new ArrayList<>();
         this.semanticErrors = semanticErrors;
+        this.symbleTable=symbleTable;
     }
 
     @Override
-    public Expression visitAtribuicao(GramaticaParser.DeclaracaoContext ctx) {
-        Token token = ctx.TIPO().getSymbol();
-        int linha = token.getLine();
-        int coluna = token.getCharPositionInLine();
-        String type = ctx.TIPO().getText();
-        String id = ctx.ID().getText();
-        String value = ctx.VALOR().getText();
-        System.out.println("Visitou Declaracao");
-        System.out.println(id + " " + type + " " + value);
-        Atribuicao atrb = new Atribuicao(id, type, value);
-        if (atrb.valor instanceof ValorInvalido){
-            semanticErrors.add("Erro: Variável " + id + " é "+tipo.getTipo()+", mas o valor atribuído é "+atrb.getTipoVerdadeiro()+" (" + linha + "," + coluna + ").");
+    public Expression visitAtribuicao(GramaticaParser.AtribuicaoContext ctx) {
+        Atribuicao atrb;
+        String type = "INVALIDO";
+        String id = "INVALIDO";
+        String value = "INVALIDO";
+        boolean erro = false;
+
+        if (ctx.TIPO() != null) type = ctx.TIPO().getText();
+        else erro = true;
+
+        if (ctx.ID() != null) id = ctx.ID().getText();
+        else erro = true;
+
+        if (ctx.INT() != null) {
+            value = ctx.INT().getText();
         }
+        else if (ctx.FLOAT() != null) {
+            value = ctx.FLOAT().getText();
+        }
+        else erro = true;
+
+        atrb = new Atribuicao(id, type, value);
+
+        if (symbleTable.check(id)) {
+            semanticErrors.add("ERRO: Variavel já declarada : " + id);
+            erro = true;
+        }
+
+        if (!atrb.isValid()) {
+            semanticErrors.add("ERRO: Variável " + id + " é " + atrb.tipo.getTipo() + ", mas o valor atribuído é " + atrb.getTipoVerdadeiro());
+            erro = true;
+        }
+
+        if (!erro) {
+            symbleTable.add(id, atrb.valor);
+        }
+
+        System.out.println("Visitou Atribuicao");
+        System.out.println(atrb);
+
         return atrb;
     }
 
 
     @Override
-    public Expression visitInteiro(GramaticaParser.NumeroContext ctx) {
+    public Expression visitInteiro(GramaticaParser.InteiroContext ctx) {
         String numtxt = ctx.getChild(0).getText();
-        return new ValorInteiro(Integer.parseInt(numtxt));
+
+        ValorInteiro inteiro = new ValorInteiro(Integer.parseInt(numtxt));
+        inteiro.setType("INT");
+
+        System.out.println("Visitou Inteiro");
+        System.out.println(inteiro);
+
+        return inteiro;
     }
 
     @Override
-    public Expression visitReal(GramaticaParser.NumeroContext ctx) {
+    public Expression visitReal(GramaticaParser.RealContext ctx) {
         String numtxt = ctx.getChild(0).getText();
-        return new ValorReal(Float.parseFloat(numtxt));
+
+        ValorReal real = new ValorReal(Float.parseFloat(numtxt));
+        real.setType("FLOAT");
+
+        System.out.println("Visitou Real");
+        System.out.println(real);
+
+        return real;
     }
 
     @Override
     public Expression visitVariavel(GramaticaParser.VariavelContext ctx) {
-        String id=ctx.getChild(0).getText();
-        return new Variavel(id);
+        String id = ctx.getChild(0).getText();
+
+        Variavel variavel = new Variavel(id);
+        if (!symbleTable.check(id)) {
+            semanticErrors.add("ERRO: Variavel nao declarada : "+id);
+            variavel.setType("ERRO_VND");
+        }
+        else if (symbleTable.valueof(id) instanceof ValorInteiro) {
+            variavel.setType("INT");
+        }
+        else {
+            variavel.setType("FLOAT");
+        }
+
+        System.out.println("Visitou Variavel");
+        System.out.println(variavel);
+
+        return variavel;
     }
 
     @Override
     public Expression visitSoma(GramaticaParser.SomaContext ctx) {
-        Expression left=visit(ctx.getChild(0));
-        Expression right=visit(ctx.getChild(2));
+        Expression left= visit(ctx.getChild(0));
+        Expression right= visit(ctx.getChild(2));
+
         OpArit soma = new OpAritSoma(left, right);
-        if (left.type=="int" && right.type=="int"){
-            soma.setType("int");
+        if (left.getType().equals("ERRO_VND") || right.getType().equals("ERRO_VND")) {
+            soma.setType("ERRO_VND");
         }
-        else{
-            soma.setType("float");
+        else if (left.getType().equals("INT") && right.getType().equals("INT")){
+            soma.setType("INT");
         }
+        else {
+            soma.setType("FLOAT");
+        }
+
+        System.out.println("Visitou Soma");
+        System.out.println(soma);
+
         return  soma;
     }
 
     @Override
-    public Expression visitMultiplicacao(GramaticaParser.SomaContext ctx) {
-        Expression left=visit(ctx.getChild(0));
-        Expression right=visit(ctx.getChild(2));
+    public Expression visitMultiplicacao(GramaticaParser.MultiplicacaoContext ctx) {
+        Expression left= visit(ctx.getChild(0));
+        Expression right= visit(ctx.getChild(2));
+
         OpArit multiplicacao = new OpAritMultiplicacao(left, right);
-        if (left.type=="int" && right.type=="int"){
-            soma.setType("int");
+        if (left.getType().equals("ERRO_VND") || right.getType().equals("ERRO_VND")) {
+            multiplicacao.setType("ERRO_VND");
         }
-        else{
-            soma.setType("float");
+        else if (left.getType().equals("INT") && right.getType().equals("INT")){
+            multiplicacao.setType("INT");
         }
+        else {
+            multiplicacao.setType("FLOAT");
+        }
+
+        System.out.println("Visitou Multiplicacao");
+        System.out.println(multiplicacao);
+
         return multiplicacao;
     }
 }

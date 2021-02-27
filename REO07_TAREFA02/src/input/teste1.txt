@@ -1,0 +1,10 @@
+a:INT=1;
+b:FLOAT=2;
+a+b;
+a*b;
+2*a+b*3;
+
+b:FLOAT=3.5;
+1+c;
+c:int=2;
+d:FLOAT=a;
