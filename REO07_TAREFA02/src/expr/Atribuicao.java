@@ -22,4 +22,16 @@ public class Atribuicao extends Expression {
     public String toString() {
         return String.format("%s:%s=%s", id, tipo, valor);
     }
+
+    public String getTipoVerdadeiro() {
+        if (valor instanceof ValorInteiro) {
+            return "INT";
+        }
+        else if (valor instanceof ValorReal) {
+            return "FLOAT";
+        }
+        else {
+            return "INVALIDO";
+        }
+    }
 }
